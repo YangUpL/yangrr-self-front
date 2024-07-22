@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import router from '../routers/router.js';
+  import router from '../routers/router.ts';
 
   function toLogin() {
     router.push('/login')

@@ -11,6 +11,10 @@ const router = createRouter({
     routes: [
         {
             path: '/',
+            redirect:'/welcome',
+        },
+        {
+            path: '/welcome',
             component: Welcome
         },
         {
