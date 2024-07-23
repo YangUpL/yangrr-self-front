@@ -3,7 +3,7 @@
  */
 export interface LoginDto {
     userAccount: string;
-    password: string;
+    userPassword: string;
 }
 
 /**
@@ -11,6 +11,6 @@ export interface LoginDto {
  */
 export interface RegisterDto {
     userAccount: string;
-    password: string;
-    rePassword: string;
+    userPassword: string;
+    checkPassword: string;
 }

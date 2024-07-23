@@ -2,13 +2,18 @@
 
 import Index from "./pages/index/Index.vue";
 
-import {computed} from "vue"
+import {computed, onMounted} from "vue"
 import {useRoute} from 'vue-router'
+import {current} from "./api/request.ts";
 
 const route = useRoute() // 路由信息对象
 // 判断是否显示Index组件
 const isIndex = computed(() => {
   return route.name !== "Login" && route.name !== "Register";
+})
+
+onMounted(() => {
+  current()
 })
 </script>
 

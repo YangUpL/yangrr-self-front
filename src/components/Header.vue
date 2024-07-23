@@ -1,13 +1,34 @@
 <script setup lang="ts">
-  import router from '../routers/router.ts';
+import router from '../routers/router.ts';
+import {onMounted,ref} from "vue";
+import {ArrowDown} from "@element-plus/icons-vue";
+import {logout} from "../api/request.ts";
 
-  function toLogin() {
-    router.push('/login')
-  }
+function toLogin() {
+  router.push('/login')
+}
 
-  function toRegister() {
-    router.push('/register')
+function toRegister() {
+  router.push('/register')
+}
+
+const message = ref('')
+const isLogin = ref(false);
+
+function checkLogin() {
+  const userInfo = sessionStorage.getItem('userInfo');
+  if (userInfo != null) {
+    const user = JSON.parse(userInfo);
+    message.value = user.username;
+    isLogin.value = true;
+  } else {
+    isLogin.value = false;
   }
+}
+
+onMounted(() => {
+    checkLogin()
+});
 </script>
 
 <template>
@@ -21,17 +42,41 @@
   </div>
 
   <div id="header_button">
-    <el-button type="primary" round @click="toLogin">登录</el-button>
-    <el-button type="success" round @click="toRegister">注册</el-button>
+    <el-button type="primary" round @click="toLogin" v-show="!isLogin">登录</el-button>
+    <el-button type="success" round @click="toRegister" v-show="!isLogin">注册</el-button>
+
+    <el-dropdown v-show="isLogin">
+    <span class="el-dropdown-link">
+      欢迎：{{ message }}
+      <el-icon class="el-icon--right">
+        <arrow-down/>
+      </el-icon>
+    </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
   </div>
 </template>
 
 <style scoped>
 
+.el-dropdown-link {
+  display: block;
+  margin-top: 18px;
+}
+
+.el-dropdown-link:hover {
+  cursor: pointer;
+  border: none;
+}
+
 #header_list {
   display: inline-block;
 
-  span{
+  span {
 
     margin: 0 19px;
     font-size: 14px;

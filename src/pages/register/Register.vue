@@ -4,7 +4,7 @@ import {register} from "../../api/request.ts";
 import {RegisterDto} from "../../model/pojo.ts";
 import router from "../../routers/router.ts";
 
-const registerUser = ref<RegisterDto>({userAccount: '', password: '',rePassword:''})
+const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkPassword: ''})
 
 </script>
 
@@ -12,28 +12,30 @@ const registerUser = ref<RegisterDto>({userAccount: '', password: '',rePassword:
   <div class="body">
     <div class="loginBox">
       <h2>注册</h2>
-      <div class="item">
-        <input type="text" required v-model="registerUser.userAccount">
-        <label>请输入账号</label>
-      </div>
-      <div class="item">
-        <input type="password" required v-model="registerUser.password">
-        <label>请输入密码</label>
-      </div>
+      <form>
+        <div class="item">
+          <input type="text" required v-model="registerUser.userAccount">
+          <label>请输入账号</label>
+        </div>
+        <div class="item">
+          <input type="password" required v-model="registerUser.userPassword">
+          <label>请输入密码</label>
+        </div>
 
-      <div class="item">
-        <input type="password" required v-model="registerUser.rePassword">
-        <label>请再次输入密码</label>
-      </div>
-      <button class="btn" @click="register(registerUser)">注册
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+        <div class="item">
+          <input type="password" required v-model="registerUser.checkPassword">
+          <label>请再次输入密码</label>
+        </div>
+        <button class="btn" @click="register(registerUser)">注册
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-      <button class="btn" @click="router.push('login')">去登陆
-      </button>
+        <button class="btn" @click="router.push('login')">去登陆
+        </button>
+      </form>
     </div>
   </div>
 </template>

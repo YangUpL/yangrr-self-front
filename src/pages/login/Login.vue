@@ -4,19 +4,20 @@
   import {LoginDto} from "../../model/pojo.ts";
   import router from "../../routers/router.ts";
 
-  const loginUser = ref<LoginDto>({ userAccount: "", password: "" })
+  const loginUser = ref<LoginDto>({ userAccount: "", userPassword: "" })
 </script>
 
 <template>
   <div class="body">
     <div class="loginBox">
       <h2>登录</h2>
+      <form>
         <div class="item">
           <input type="text" required v-model="loginUser.userAccount">
           <label>请输入账号</label>
         </div>
         <div class="item">
-          <input type="password" required v-model="loginUser.password">
+          <input type="password" required v-model="loginUser.userPassword">
           <label>请输入密码</label>
         </div>
         <button class="btn" @click="login(loginUser)">登录
@@ -25,7 +26,9 @@
           <span></span>
           <span></span>
         </button>
-      <button class="btn" @click="router.push('register')">去注册</button>
+
+        <button class="btn" @click="router.push('register')">去注册</button>
+      </form>
     </div>
   </div>
 </template>
