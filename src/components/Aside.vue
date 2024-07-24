@@ -24,6 +24,7 @@ const handleClose = (key: string, keyPath: string[]) => {
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
+
     >
       <el-menu-item index="1">
         <el-icon>

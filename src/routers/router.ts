@@ -43,7 +43,7 @@ router.afterEach((to, from) => {
         setTimeout(() => {
             location.reload();
             console.log('刷新');
-        }, 100);
+        }, 50);
     }
 });
 

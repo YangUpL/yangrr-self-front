@@ -1,6 +1,7 @@
 import axios from "axios";
 import {LoginDto, RegisterDto} from "../model/pojo.ts";
 import router from "../routers/router.ts";
+import {error, success} from "../message/message.ts";
 
 /**
  * 登录请求
@@ -9,19 +10,20 @@ import router from "../routers/router.ts";
 export const login = async (loginUser: LoginDto) => {
 
     if (loginUser.userAccount === '' || loginUser.userPassword === '') {
-        alert("用户名或密码不能为空")
+
+        error('用户名或密码不能为空')
         return
     }
 
     const promise = await axios.post("/api/user/login", loginUser)
 
-
     if (promise.data.code === 20000) {
-        alert("登录成功")
+        // alert("登录成功")
         current()
         router.push('/')
+        success('登录成功')
     } else {
-        alert(promise.data.description)
+        error(promise.data.description)
         return
     }
 }
@@ -34,12 +36,13 @@ export const register = async (registerUser: RegisterDto) => {
 
     if (registerUser.userAccount === '' || registerUser.userPassword === ''
         || registerUser.checkPassword === '') {
-        alert("请填写完整")
+        error('请将信息填写完整')
         return
     }
 
     if (registerUser.userPassword !== registerUser.checkPassword) {
-        alert("两次密码不一致")
+
+        error('两次密码不一致')
         return
     }
 
@@ -48,11 +51,11 @@ export const register = async (registerUser: RegisterDto) => {
 
 
     if (promise.data.code === 20000) {
-        alert("注册成功,快去登录吧")
+        success('注册成功,快去登录吧')
         router.push('/login')
-
+        return promise.data.data
     } else {
-        alert(promise.data.description)
+        error(promise.data.description)
         return
     }
 }

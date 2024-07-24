@@ -6,6 +6,7 @@ import router from "../../routers/router.ts";
 
 const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkPassword: ''})
 
+
 </script>
 
 <template>

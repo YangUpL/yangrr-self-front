@@ -11,7 +11,6 @@
   <div class="body">
     <div class="loginBox">
       <h2>登录</h2>
-      <form>
         <div class="item">
           <input type="text" required v-model="loginUser.userAccount">
           <label>请输入账号</label>
@@ -28,7 +27,6 @@
         </button>
 
         <button class="btn" @click="router.push('register')">去注册</button>
-      </form>
     </div>
   </div>
 </template>
@@ -201,6 +199,5 @@ h2 {
     top: -100%;
   }
 }
-
 
 </style>
