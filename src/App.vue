@@ -9,7 +9,7 @@ import {current} from "./api/request.ts";
 const route = useRoute() // 路由信息对象
 // 判断是否显示Index组件
 const isIndex = computed(() => {
-  return route.name !== "Login" && route.name !== "Register";
+  return route.name !== "Login" && route.name !== "Register" && route.name !== "SelfCenter";
 })
 
 onMounted(() => {

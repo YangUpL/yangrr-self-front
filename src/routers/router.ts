@@ -4,6 +4,7 @@ import Welcome from "../pages/welcome/Welcome.vue";
 import StudyJavaTec from "../pages/studyJavaTec/StudyJavaTec.vue";
 import Login from "../pages/login/Login.vue";
 import Register from "../pages/register/Register.vue";
+import SelfCenter from "../pages/selfCenter/SelfCenter.vue";
 
 // 创建路由对象,声明路由规则
 const router = createRouter({
@@ -31,6 +32,12 @@ const router = createRouter({
             path: '/register',
             name: 'Register',
             component: Register
+        },
+
+        {
+            path: '/selfCenter',
+            name: 'SelfCenter',
+            component: SelfCenter
         },
 
     ]

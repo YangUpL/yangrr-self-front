@@ -12,6 +12,10 @@ function toRegister() {
   router.push('/register')
 }
 
+function toSelfCenter() {
+  router.push('/selfCenter')
+}
+
 const message = ref('')
 const isLogin = ref(false);
 
@@ -29,36 +33,41 @@ function checkLogin() {
 onMounted(() => {
     checkLogin()
 });
+
+
 </script>
 
 <template>
+    <div>
+      <div id="header_list">
+        <span><a>平台简介</a></span>
+        <span><a>了解作者</a></span>
+        <span><a>每日分享</a></span>
+        <span><a>知识交流</a></span>
+        <span><a>平台反馈</a></span>
+      </div>
 
-  <div id="header_list">
-    <span><a>平台简介</a></span>
-    <span><a>了解作者</a></span>
-    <span><a>每日分享</a></span>
-    <span><a>知识交流</a></span>
-    <span><a>平台反馈</a></span>
-  </div>
+      <div id="header_button">
+        <el-button type="primary" round @click="toLogin" v-show="!isLogin">登录</el-button>
+        <el-button type="success" round @click="toRegister" v-show="!isLogin">注册</el-button>
 
-  <div id="header_button">
-    <el-button type="primary" round @click="toLogin" v-show="!isLogin">登录</el-button>
-    <el-button type="success" round @click="toRegister" v-show="!isLogin">注册</el-button>
+        <el-dropdown v-show="isLogin">
+        <span class="el-dropdown-link">
+          欢迎：{{ message }}
+          <el-icon class="el-icon--right">
+            <arrow-down/>
+          </el-icon>
+        </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="toSelfCenter">个人中心</el-dropdown-item>
+              <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+    </div>
 
-    <el-dropdown v-show="isLogin">
-    <span class="el-dropdown-link">
-      欢迎：{{ message }}
-      <el-icon class="el-icon--right">
-        <arrow-down/>
-      </el-icon>
-    </span>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </div>
 </template>
 
 <style scoped>
@@ -66,11 +75,11 @@ onMounted(() => {
 .el-dropdown-link {
   display: block;
   margin-top: 18px;
+  border: none;
 }
 
 .el-dropdown-link:hover {
   cursor: pointer;
-  border: none;
 }
 
 #header_list {
@@ -78,7 +87,7 @@ onMounted(() => {
 
   span {
 
-    margin: 0 19px;
+    margin: 0 1vw;
     font-size: 14px;
   }
 }
@@ -86,7 +95,6 @@ onMounted(() => {
 #header_button {
 
   display: inline-block;
-
   position: absolute;
   right: 20px;
 }

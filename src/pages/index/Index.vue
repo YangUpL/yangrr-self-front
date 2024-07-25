@@ -18,10 +18,6 @@
         <el-main id="main">
           <router-view></router-view>
         </el-main>
-
-        <el-footer id="footer">
-          <Footer></Footer>
-        </el-footer>
       </el-container>
     </el-container>
   </div>
@@ -37,7 +33,7 @@
 /* 选择id为'aside'的元素 */
 #aside {
   /* 将'aside'元素的高度设置为视口高度的100% */
-  height: 100vh;
+  height: 95vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -53,7 +49,7 @@
   /* 设置'header'元素内文本的行高为60像素 */
   line-height: 10vh;
   /* 设置'header'元素的高度为60像素 */
-  height: 10vh;
+  height: 10%;
   font-size: 14px;
 
   border-bottom: 1px solid #9d9393;
@@ -63,23 +59,13 @@
 #main {
   /* 在'main'元素内水平居中文本 */
   text-align: center;
-
-  /* 设置'main'元素的高度为视口高度的100%减去120像素 */
-  height: 80vh;
   font-size: 14px;
 }
 
-/* 选择id为'footer'的元素 */
-#footer {
-  /* 在'footer'元素内水平居中文本 */
-  text-align: center;
-
-  /* 设置'footer'元素内文本的行高为60像素 */
-  line-height: 10vh;
-
-  /* 设置'footer'元素的高度为60像素 */
-  height: 10vh;
-  font-size: 14px;
+/* 针对Webkit浏览器（如Chrome和Safari） */
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 

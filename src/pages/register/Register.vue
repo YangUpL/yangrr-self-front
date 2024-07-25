@@ -13,7 +13,6 @@ const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkP
   <div class="body">
     <div class="loginBox">
       <h2>注册</h2>
-      <form>
         <div class="item">
           <input type="text" required v-model="registerUser.userAccount">
           <label>请输入账号</label>
@@ -36,7 +35,6 @@ const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkP
 
         <button class="btn" @click="router.push('login')">去登陆
         </button>
-      </form>
     </div>
   </div>
 </template>
