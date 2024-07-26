@@ -14,3 +14,14 @@ export interface RegisterDto {
     userPassword: string;
     checkPassword: string;
 }
+
+
+export interface updateDto{
+    username: string;
+    phone: string;
+    email: string;
+    gender:string;
+    planetCode:number;
+    userRole:number;
+    userStatus:number;
+}

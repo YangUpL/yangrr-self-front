@@ -1,5 +1,5 @@
 import axios from "axios";
-import {LoginDto, RegisterDto} from "../model/pojo.ts";
+import {LoginDto, RegisterDto, updateDto} from "../model/pojo.ts";
 import router from "../routers/router.ts";
 import {error, success} from "../message/message.ts";
 
@@ -63,8 +63,22 @@ export const register = async (registerUser: RegisterDto) => {
 export const current = async () => {
     const promise = await axios.get("/api/user/current");
 
-    if (promise.data.code === 20000 && sessionStorage.getItem("userInfo") === null) {
+    if (promise.data.code === 20000) {
         sessionStorage.setItem("userInfo", JSON.stringify(promise.data.data));
+        return
+    }
+}
+
+
+export const update = async (updateUser:updateDto) => {
+    const promise = await axios.post("/api/user/update", updateUser);
+
+    if (promise.data.code === 20000) {
+        success('修改成功')
+        current()
+        return
+    } else {
+        error(promise.data.description)
         return
     }
 }

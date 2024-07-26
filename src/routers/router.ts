@@ -12,7 +12,7 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect:'/welcome',
+            redirect: '/welcome',
         },
         {
             path: '/welcome',
@@ -43,9 +43,8 @@ const router = createRouter({
     ]
 
 })
-
 router.afterEach((to, from) => {
-    if (from.path === '/login' && (to.path === '/' || to.path === '/welcome')) {
+    if ((from.path === '/login' || from.path === '/selfCenter')  && (to.path === '/' || to.path === '/welcome')) {
         // 添加一个延迟以确保导航完成后再刷新页面
         setTimeout(() => {
             location.reload();

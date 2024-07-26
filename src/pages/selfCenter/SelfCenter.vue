@@ -13,7 +13,7 @@
       border
   >
     <template #extra>
-      <el-button type="primary">确认修改</el-button>
+      <el-button type="primary" @click="update(userDto)">确认修改</el-button>
     </template>
     <el-descriptions-item>
       <template #label>
@@ -24,7 +24,7 @@
           Username
         </div>
       </template>
-      <el-input v-model="input_username" style="width: 240px" placeholder="Please input"/>
+      <el-input v-model="userDto.username" style="width: 240px" placeholder="Please input"/>
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
@@ -35,7 +35,7 @@
           Telephone
         </div>
       </template>
-      <el-input v-model="input_tel" style="width: 240px" placeholder="Please input"/>
+      <el-input v-model="userDto.phone" style="width: 240px" placeholder="Please input"/>
     </el-descriptions-item>
 
     <el-descriptions-item>
@@ -47,7 +47,7 @@
           Email
         </div>
       </template>
-      <el-input v-model="input_email" style="width: 240px" placeholder="Please input"/>
+      <el-input v-model="userDto.email" style="width: 240px" placeholder="Please input"/>
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
@@ -59,9 +59,9 @@
         </div>
       </template>
       <div class="mb-2 flex items-center text-sm">
-        <el-radio-group v-model="radio1" class="ml-4">
-          <el-radio value="1" size="large">男</el-radio>
-          <el-radio value="2" size="large">女</el-radio>
+        <el-radio-group v-model="userDto.gender" class="ml-4">
+          <el-radio value="0" size="large">男</el-radio>
+          <el-radio value="1" size="large">女</el-radio>
         </el-radio-group>
       </div>
     </el-descriptions-item>
@@ -71,10 +71,10 @@
           <el-icon :style="iconStyle">
             <Place/>
           </el-icon>
-          PlantedCode
+          PlanetCode
         </div>
       </template>
-      <el-tag size="small">1</el-tag>
+      <el-tag size="small">{{ userDto.planetCode }}</el-tag>
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
@@ -85,7 +85,8 @@
           UserRole
         </div>
       </template>
-      普通用户
+      <span v-show="userDto.userRole === 0">普通用户</span>
+      <span v-show="userDto.userRole === 1" style="color: red">管理员</span>
     </el-descriptions-item>
 
     <el-descriptions-item>
@@ -98,16 +99,27 @@
         </div>
       </template>
       <el-row>
-        <el-col>
+        <el-col v-show="userDto.userStatus === 0">
           <el-result
               icon="success"
               title="正常"
           >
           </el-result>
         </el-col>
+
+        <el-col v-show="userDto.userStatus === 1">
+          <el-result
+              icon="error"
+              title="封禁"
+          >
+          </el-result>
+        </el-col>
       </el-row>
     </el-descriptions-item>
   </el-descriptions>
+  <div id="toHome">
+    <router-link to="/">回到主页</router-link>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -135,10 +147,25 @@ const iconStyle = computed(() => {
   }
 })
 
-const radio1 = ref('1')
-const input_username = ref('')
-const input_tel = ref('')
-const input_email = ref('')
+
+import {onMounted} from 'vue'
+import {updateDto} from "../../model/pojo.ts";
+import {update} from "../../api/request.ts";
+
+const userDto = ref<updateDto>({
+  username: '',
+  phone: '',
+  email: '',
+  gender: '0',
+  planetCode: 0,
+  userRole: 0,
+  userStatus: 0,
+})
+
+onMounted(() => {
+  const userInfo = sessionStorage.getItem('userInfo')
+  if (userInfo) Object.assign(userDto.value, JSON.parse(userInfo))
+})
 </script>
 
 <style scoped>
@@ -149,5 +176,17 @@ const input_email = ref('')
 
 .margin-top {
   margin-top: 20px;
+}
+
+#toHome{
+  margin-top: 10vh;
+  font-size: 20px;
+  color: #409EFF;
+  cursor: pointer;
+  margin-left: 50vw;
+}
+a{
+  text-decoration: none;
+  color: #409EFF;
 }
 </style>
