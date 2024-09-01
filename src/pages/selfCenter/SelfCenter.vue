@@ -13,7 +13,7 @@
       border
   >
     <template #extra>
-      <el-button type="primary" @click="update(userDto)">确认修改</el-button>
+      <el-button type="primary" @click="handleUpdate(userDto)">确认修改</el-button>
     </template>
     <el-descriptions-item>
       <template #label>
@@ -149,9 +149,11 @@ const iconStyle = computed(() => {
 
 
 import {onMounted} from 'vue'
-import {updateDto} from "../../model/pojo.ts";
-import {update} from "../../api/request.ts";
+import {updateDto} from "../../model/pojo";
+import {update} from "../../api/request";
+import { useUserStore } from '../../stores/userStore';
 
+const userStore = useUserStore();
 const userDto = ref<updateDto>({
   username: '',
   phone: '',
@@ -166,6 +168,12 @@ onMounted(() => {
   const userInfo = sessionStorage.getItem('userInfo')
   if (userInfo) Object.assign(userDto.value, JSON.parse(userInfo))
 })
+
+
+function handleUpdate(userDto:updateDto){
+  update(userDto)
+  userStore.setUser(userDto);
+}
 </script>
 
 <style scoped>

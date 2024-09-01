@@ -1,10 +1,21 @@
 <script setup lang="ts">
   import {ref} from "vue";
-  import {login} from "../../api/request.ts";
-  import {LoginDto} from "../../model/pojo.ts";
-  import router from "../../routers/router.ts";
+  import {login} from "../../api/request";
+  import {LoginDto} from "../../model/pojo";
+  import router from "../../routers/router";
+  import { useUserStore } from '../../stores/userStore';
 
+  const userStore = useUserStore();
   const loginUser = ref<LoginDto>({ userAccount: "", userPassword: "" })
+
+  async function handleLogin() {
+  const response = await login(loginUser.value);
+
+  if (response?.data.code === 20000) {
+    userStore.setUser(response.data.data);
+    router.push('/');
+  }
+}
 </script>
 
 <template>
@@ -19,7 +30,7 @@
           <input type="password" required v-model="loginUser.userPassword">
           <label>请输入密码</label>
         </div>
-        <button class="btn" @click="login(loginUser)">登录
+        <button class="btn" @click="handleLogin">登录
           <span></span>
           <span></span>
           <span></span>

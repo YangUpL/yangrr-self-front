@@ -1,21 +1,31 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
+import {useDefer} from '../../utils/useDefer'
+const defer = useDefer();
+
+  const route = useRoute() // 路由信息对象
+const showHeader = computed(() => {
+  return route.name === 'PlatformIntroduction' || route.name === 'AboutAuthor' 
+    || route.name === 'KnowledgeExchange'
+})
 </script>
 
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="200px" id="aside">
+      <el-aside width="200px" id="aside" v-if=defer(0)>
         <Aside></Aside>
       </el-aside>
 
 
       <el-container>
-        <el-header id="header">
+        <el-header id="header" v-show="showHeader" v-if=defer(1)>
           <Header></Header>
         </el-header>
 
-        <el-main id="main">
+        <el-main id="main" v-if=defer(2)>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -40,6 +50,7 @@
   flex-direction: column;
   width: 30vh;
   font-size: 14px;
+  display: fixed;
 }
 
 /* 选择id为'header'的元素 */
@@ -58,12 +69,12 @@
 /* 选择id为'main'的元素 */
 #main {
   /* 在'main'元素内水平居中文本 */
-  text-align: center;
+  /* text-align: center; */
   font-size: 14px;
 }
 
-/* 针对Webkit浏览器（如Chrome和Safari） */
-::-webkit-scrollbar {
+/* 针对Webkit浏览器（如Chrome和Safari） */ 
+ ::-webkit-scrollbar {
   width: 0;
   background: transparent;
 }

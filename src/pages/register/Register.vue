@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {register} from "../../api/request.ts";
-import {RegisterDto} from "../../model/pojo.ts";
-import router from "../../routers/router.ts";
+import {register} from "../../api/request";
+import {RegisterDto} from "../../model/pojo";
+import router from "../../routers/router";
 
 const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkPassword: ''})
 

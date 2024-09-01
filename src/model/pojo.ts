@@ -15,6 +15,19 @@ export interface RegisterDto {
     checkPassword: string;
 }
 
+export interface obtainJavaQuestionDto {
+    id:number;
+    question:string;
+    classification:number;
+}
+
+export interface questionPageDto{
+    total?:number;
+    size:number;
+    current:number;
+    queName:string
+    classification:number
+}
 
 export interface updateDto{
     username: string;

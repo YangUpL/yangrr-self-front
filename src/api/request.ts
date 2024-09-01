@@ -1,7 +1,8 @@
 import axios from "axios";
-import {LoginDto, RegisterDto, updateDto} from "../model/pojo.ts";
+import {LoginDto, questionPageDto, RegisterDto, updateDto} from "../model/pojo.ts";
 import router from "../routers/router.ts";
 import {error, success} from "../message/message.ts";
+
 
 /**
  * 登录请求
@@ -22,6 +23,8 @@ export const login = async (loginUser: LoginDto) => {
         current()
         router.push('/')
         success('登录成功')
+
+        return promise;
     } else {
         error(promise.data.description)
         return
@@ -69,8 +72,7 @@ export const current = async () => {
     }
 }
 
-
-export const update = async (updateUser:updateDto) => {
+export const update = async (updateUser: updateDto) => {
     const promise = await axios.post("/api/user/update", updateUser);
 
     if (promise.data.code === 20000) {
@@ -83,8 +85,23 @@ export const update = async (updateUser:updateDto) => {
     }
 }
 
+
+export const obtainJavaQuestion = async (pageInfo:questionPageDto) => {
+    const promise = await axios.post("/api/question/java",pageInfo);
+    if (promise.data.code === 20000) {
+        return promise.data.data;
+    }
+};
+
 export const logout = async () => {
     await axios.post("/api/user/logout");
+    const userInfo = sessionStorage.getItem('userInfo')
     sessionStorage.removeItem('userInfo');
-    window.location.reload();
+    let user;
+    if(userInfo){
+        user = JSON.parse(userInfo)
+        console.log(user.uniqueId)
+    }
+    localStorage.removeItem(`hasSeenNote_${user.uniqueId}`);
+    localStorage.removeItem(`countdownTime_${user.uniqueId}`);
 };

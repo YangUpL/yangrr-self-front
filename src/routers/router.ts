@@ -1,55 +1,102 @@
-// 导入路由创建的相关方法
-import {createRouter, createWebHashHistory} from 'vue-router'
-import Welcome from "../pages/welcome/Welcome.vue";
-import StudyJavaTec from "../pages/studyJavaTec/StudyJavaTec.vue";
-import Login from "../pages/login/Login.vue";
-import Register from "../pages/register/Register.vue";
-import SelfCenter from "../pages/selfCenter/SelfCenter.vue";
+import { createRouter, createWebHashHistory } from 'vue-router';
+import { error } from '../message/message';
 
-// 创建路由对象,声明路由规则
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         {
             path: '/',
-            redirect: '/welcome',
+            redirect: '/welcome/platform-introduction',
         },
         {
             path: '/welcome',
-            component: Welcome
+            children: [
+                {
+                    path: 'platform-introduction', // 平台简介
+                    name: 'PlatformIntroduction',
+                    component: () => import('../pages/welcome/PlatformIntroduction.vue')
+                },
+                {
+                    path: 'about-author', // 了解作者
+                    name: 'AboutAuthor',
+                    component: () => import('../pages/welcome/AboutAuthor.vue')
+                },
+                {
+                    path: 'knowledge-exchange', // 知识交流
+                    name: 'KnowledgeExchange',
+                    component: () => import('../pages/welcome/MainKnowledgeExchange.vue'),
+                    meta: { requiresAuth: true }
+                },
+                {
+                    path: 'knowledge-exchange-detail/:id', // 知识交流
+                    name: 'DetailKnowledgeExchange',
+                    component: () => import('../pages/welcome/DetailKnowledgeExchange.vue'),
+                    meta: { requiresAuth: true }
+                }
+            ]
         },
+        
         {
             path: '/studyJavaTec',
             name: 'StudyJavaTec',
-            component: StudyJavaTec
+            component: () => import('../pages/studyJavaTec/StudyJavaTec.vue'),
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/interviewJava',
+            name: 'InterviewJava',
+            component: () => import('../pages/interviewJava/InterviewJava.vue'),
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/interviewAnswer',
+            name: 'InterviewAnswer',
+            component: () => import('../pages/interviewAnswer/InterviewAnswer.vue'),
+            meta: { requiresAuth: true }
         },
         {
             path: '/login',
             name: 'Login',
-            component: Login
+            component: () => import('../pages/login/Login.vue')
         },
         {
             path: '/register',
             name: 'Register',
-            component: Register
+            component: () => import('../pages/register/Register.vue')
         },
-
         {
             path: '/selfCenter',
             name: 'SelfCenter',
-            component: SelfCenter
+            component: () => import('../pages/selfCenter/SelfCenter.vue'),
+            meta: { requiresAuth: true }
         },
-
+        {
+            path: '/admin/userManager',
+            name: 'UserManager',
+            component: () => import('../pages/admin/UserManager.vue'),
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/admin/questionManager',
+            name: 'QuestionManager',
+            component: () => import('../pages/admin/QuestionManager.vue'),
+            meta: { requiresAuth: true }
+        },
     ]
+});
 
-})
-router.afterEach((to, from) => {
-    if ((from.path === '/login' || from.path === '/selfCenter')  && (to.path === '/' || to.path === '/welcome')) {
-        // 添加一个延迟以确保导航完成后再刷新页面
-        setTimeout(() => {
-            location.reload();
-            console.log('刷新');
-        }, 50);
+router.beforeEach((to, from, next) => {
+    // 获取用户信息
+    const userInfo = sessionStorage.getItem('userInfo');
+
+    // 如果目标路由需要登录且用户未登录
+    if (to.meta.requiresAuth && !userInfo) {
+        error('请先登录，既可体验完整功能')
+        // 重定向到登录页面
+        next('/login');
+    } else {
+        // 允许路由跳转
+        next();
     }
 });
 

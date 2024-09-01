@@ -27,6 +27,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "src/**/*.js",
     "node_modules/unplugin-auto-import/auto-imports.d.ts"
   ]
 }
