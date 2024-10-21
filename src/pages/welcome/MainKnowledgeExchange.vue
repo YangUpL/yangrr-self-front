@@ -5,6 +5,8 @@
       <el-input v-model="searchQuery" placeholder="搜索文章" class="search-bar"></el-input>
     </el-row>
 
+
+    <!-- v-model="showEditor"人工智能代替不了人类!!!!!    没问出来   文档解决 -->
     <el-dialog v-model="showEditor" title="发布文章" width="50%">
       <el-input
         v-model="newPostTitle"
@@ -36,7 +38,7 @@
     </el-dialog>
 
     <el-row gutter="10" class="article-list">
-      <el-col :span="24" v-for="post in filteredPosts" :key="post.id">
+      <el-col :span="24" v-for="post in filteredtitleDtoArray" :key="post.id">
         <el-card shadow="hover" class="article-card">
           <div class="article-header">
             <img :src="post.avatar" class="article-avatar" alt="头像"/>
@@ -45,16 +47,13 @@
               <span class="article-time">{{ post.time }}</span>
             </div>
           </div>
-
           <h3 class="article-title">{{ post.title }}</h3>
-
           <div class="article-body">
             <p class="article-content">
-              {{ post.content.length > 200 ? post.content.substring(0, 200) + '···' : post.content }}
+              {{ post.content.length > 200? post.content.substring(0, 200) + '···' : post.content }}
               <el-button type="text" @click="viewPost(post.id)" class="view-full-text">显示全文</el-button>
             </p>
           </div>
-
           <div v-if="post.image" class="article-image">
             <img :src="post.image" alt="文章图片" />
           </div>
@@ -66,11 +65,12 @@
               </svg>
               {{ post.likes }}
             </el-button>
-            <el-button type="text" class="comment-button"  @click="viewPost(post.id)">
+            <el-button type="text" class="comment-button" @click="viewPost(post.id)">
               <svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
                 <path d="M21 15.5V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11.5L4 17v-1.5H21V15.5zm-2-10H5v9h14V5.5z"/>
               </svg>
-              {{ post.comments.length }}
+              <!-- {{ post.comments.length }} -->
+              评论
             </el-button>
             <el-button type="text" class="favorite-button" @click="toggleFavorite(post)">
                 <svg 
@@ -91,103 +91,112 @@
               分享
             </el-button>
           </div>
-
         </el-card>
       </el-col>
-    </el-row>
+  </el-row>
+
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      searchQuery: '',
-      showEditor: false,
-      newPostTitle: '', // 新增的标题输入
-      newPostContent: '',
-      fileList: [], // 上传的图片列表
-      posts: [
-        {
-          id: 1,
-          title: '配置Tomcat',
-          content: 'Tomcat 是一个开源的 Servlet 容器，用于 Java EE 应用的开发和部署...',
-          author: '作者1',
-          avatar: 'https://img1.baidu.com/it/u=1966616150,2146512490&fm=253&fmt=auto&app=138&f=JPEG?w=751&h=500',
-          time: '2024-09-01',
-          image: '', // 如果没有图片则不显示这一行
-          likes: 5,
-          liked: false,
-          favorites: 2,
-          favorited: false,
-          comments: [
-            { id: 1, username: '用户1', text: '评论1', avatar: 'https://example.com/comment1.jpg' },
-            { id: 2, username: '用户2', text: '评论2', avatar: 'https://example.com/comment2.jpg' },
-          ],
-        },
-      ],
-    };
-  },
-  computed: {
-    filteredPosts() {
-      return this.posts.filter((post) =>
-        post.title.includes(this.searchQuery)
-      );
-    },
-  },
-  methods: {
-    postArticle() {
-      if (this.newPostTitle && this.newPostContent) {
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { obtainTitleDto } from "../../model/pojo";
+import axios from 'axios';
+    const searchQuery = ref('');
+    const showEditor = ref(false);
+    const newPostTitle = ref('');
+    const newPostContent = ref('');
+    const fileList = ref([]);
+    const router = useRouter();
+    let titleDtoArray = ref<Array<obtainTitleDto>>([
+      // {
+      //     id: 1,
+      //     title: 'yangrr',
+      //     content: 'yangrr',
+      //     author: 'string',
+      //     avatar: '',
+      //     time: new Date().toLocaleString(),
+      //     image: '',
+      //     likes: 0,
+      //     liked: false,
+      //     favorites: 0,
+      //     favorited: false,
+      //     comments: [
+      //       { id: 1, username: '用户1', text: '评论1', avatar: 'https://example.com/comment1.jpg' },
+      //       { id: 2, username: '用户2', text: '评论2', avatar: 'https://example.com/comment2.jpg' },
+      //     ],
+      // }
+    ]);
+
+
+    onMounted(async () => {
+      const resp = await axios.get('/api/articleMain/search')
+      const arr  = resp.data.data
+      titleDtoArray.value = arr
+    })
+    
+
+    const filteredtitleDtoArray = computed(() =>
+      titleDtoArray.value.filter((post) => post.content.includes(searchQuery.value))
+    );
+
+
+    const postArticle = () => {
+
+      if (newPostTitle.value && newPostContent.value) {
         const newPost = {
-          id: this.posts.length + 1,
-          title: this.newPostTitle,
-          content: this.newPostContent,
+          id: titleDtoArray.value.length + 1,
+          title: newPostTitle.value,
+          content: newPostContent.value,
           author: '当前用户',
-          avatar: 'https://example.com/current-user-avatar.jpg',
+          avatar: 'https://img1.baidu.com/it/u=1966616150,2146512490&fm=253&fmt=auto&app=138&f=JPEG?w=751&h=500',
           time: new Date().toLocaleString(),
-          image: this.fileList.length > 0 ? this.fileList[0].url : '',
+          image: fileList.value.length > 0? fileList.value[0].url : '',
           likes: 0,
           liked: false,
           favorites: 0,
           favorited: false,
           comments: [],
         };
-        this.posts.push(newPost);
-        this.showEditor = false;
-        this.newPostTitle = '';
-        this.newPostContent = '';
-        this.fileList = [];
+        titleDtoArray.value.push(newPost);
+        showEditor.value = false;
+        newPostTitle.value = '';
+        newPostContent.value = '';
+        fileList.value = [];
       }
-    },
-    handlePreview(file) {
+    };
+
+    const handlePreview = (file) => {
       console.log('Preview file:', file);
-    },
-    handleRemove(file, fileList) {
-      this.fileList = fileList;
-    },
-    viewPost(id) {
-      this.$router.push({ name: 'DetailKnowledgeExchange', params: { id } });
-    },
-    toggleFavorite(post) {
+    };
+
+    const handleRemove = (file, fileList) => {
+      fileList.value = fileList;
+    };
+
+    const viewPost = async (id) => {
+      router.push({ name: 'DetailKnowledgeExchange', params: { id } });
+    };
+
+    const toggleFavorite = (post) => {
       if (post.favorited) {
         post.favorites--;
       } else {
         post.favorites++;
       }
-      post.favorited = !post.favorited;
-    },
-    likePost(post) {
+      post.favorited =!post.favorited;
+    };
+
+    const likePost = (post) => {
       if (post.liked) {
         post.likes--;
       } else {
         post.likes++;
       }
-      post.liked = !post.liked;
-    },
-  },
-};
+      post.liked =!post.liked;
+    };
 </script>
-
 <style scoped>
 .discussion {
   padding: 15px;
@@ -275,13 +284,14 @@ export default {
 }
 
 .article-image img {
-  width: 100%;
+  width: 20%;
+  height: 30%;
   border-radius: 8px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 .article-footer {
-  display: flex;
+   display: flex;
   align-items: center;
   margin-top: 10px;
 }
@@ -306,11 +316,11 @@ export default {
 .comment-icon {
   margin-right: 5px;
   width: 20px;
-  height: 20px;
+  height:20px;
   vertical-align: middle;
 }
 
-.comment-icon{
+.comment-icon {
   margin-top: 4px;
 }
 

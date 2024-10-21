@@ -48,7 +48,11 @@ export const register = async (registerUser: RegisterDto) => {
         error('两次密码不一致')
         return
     }
+    if (registerUser.email == null || registerUser.email === '') {
 
+        error('邮箱是必填项')
+        return
+    }
 
     const promise = await axios.post("/api/user/register", registerUser)
 

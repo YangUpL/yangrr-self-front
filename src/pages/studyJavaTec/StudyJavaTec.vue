@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div>StudyJavaTec</div>
+    aaa
 </template>
 
 <style scoped>

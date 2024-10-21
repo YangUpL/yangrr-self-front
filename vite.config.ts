@@ -38,6 +38,7 @@ export default defineConfig({
 
 
           "/wapi": {
+            // https://gitlab.com/Binaryify/neteasecloudmusicapi
             // 网易云的音乐代理
             target: "http://mrzym.top:3000",
             changeOrigin: true,

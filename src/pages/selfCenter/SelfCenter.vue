@@ -171,8 +171,10 @@ onMounted(() => {
 
 
 function handleUpdate(userDto:updateDto){
-  update(userDto)
-  userStore.setUser(userDto);
+  if(confirm("确认修改？")){
+    update(userDto)
+    userStore.setUser(userDto);
+  }
 }
 </script>
 

@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <!-- 左侧显示目录 -->
-    <div v-html="toc" class="toc-content"></div>
-
     <div class="out">
       <div v-html="renderedMarkdown" class="markdown-content"></div>
     </div>
@@ -15,13 +12,11 @@ import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css"; // 使用现代的代码块主题
 import markdownItAnchor from "markdown-it-anchor"; // 用于生成锚点
-import markdownItTOC from "markdown-it-toc-done-right"; // 用于生成目录
 
 export default {
   data() {
     return {
       markdownContent: "",
-      toc: "", // 用于存储生成的目录
     };
   },
   computed: {
@@ -44,15 +39,13 @@ export default {
 
       // 使用插件生成目录和锚点
       md.use(markdownItAnchor);
-      md.use(markdownItTOC, { level: [1, 2, 3], containerClass: 'toc' });
 
-      this.toc = md.render(`[[toc]]`); // 生成目录
       return md.render(this.markdownContent);
     },
   },
   mounted() {
-    axios.get("/mdDemo/test.md").then((response) => {
-      this.markdownContent = response.data;
+    axios.get("http://localhost:8080/question/answer").then((response) => {
+      this.markdownContent = response.data.data;
     });
   },
 };
@@ -75,16 +68,15 @@ window.copyCode = function (button) {
 .out{
   width: 80%;
   height: 100%;
-  overflow: hidden;
-  /* margin-top: 100px; */
-  margin-left: 230px;
+  overflow:visible;
+  margin-left: 120px;
+  padding-bottom: 10px;
 }
 /* 容器样式 */
 .v-container {
   max-width: 800px;
   margin: 0 auto;
 }
-
 
 
 /* 代码块头部样式 */
@@ -140,23 +132,25 @@ window.copyCode = function (button) {
   background-color: #1e1e1e;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  overflow-x: auto;
-  padding: 16px;
+  overflow:scroll;
+  padding: 0 16px;
   font-size: 1rem;
   color: #f8f8f2;
   margin: 0; /* 去掉代码块的外边距，使其与 .code-header 紧贴在一起 */
 }
 
 
-.markdown h1{
-  font-size: 32px;
-}
-
-
 /* Markdown 内容样式 */
 .markdown-content {
-  line-height: 2; /* 增加行间距 */
-  margin-bottom: 1.5rem; /* 增加段落底部间距 */
+  line-height: 2; 
+  padding-bottom: 1rem;
+  overflow-y: auto; 
+}
+
+/* 针对Webkit浏览器（如Chrome和Safari）  */
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 
@@ -167,7 +161,7 @@ window.copyCode = function (button) {
   margin: 1.5rem 0;
   background-color: rgba(66, 185, 131, .1);
   color: #777; /* 深绿色文本颜色 */
-  /* font-style: italic; */
+  font-style: italic;
   font-size: 15px;
   line-height: 1.6rem; 
   word-spacing: 0.05rem;

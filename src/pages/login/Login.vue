@@ -38,6 +38,8 @@
         </button>
 
         <button class="btn" @click="router.push('register')">去注册</button>
+        <button class="btn" @click="router.push('findPwd')">忘记密码
+        </button>
     </div>
   </div>
 </template>
@@ -124,7 +126,7 @@ h2 {
   overflow: hidden;
   text-transform: uppercase;
   letter-spacing: 2px;
-  left: 35%;
+  left: 30%;
 }
 
 

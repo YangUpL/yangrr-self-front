@@ -65,6 +65,11 @@ const router = createRouter({
             component: () => import('../pages/register/Register.vue')
         },
         {
+            path: '/findPwd',
+            name: 'FindPwd',
+            component: () => import('../pages/findPwd/FindPwd.vue')
+        },
+        {
             path: '/selfCenter',
             name: 'SelfCenter',
             component: () => import('../pages/selfCenter/SelfCenter.vue'),
@@ -91,7 +96,7 @@ router.beforeEach((to, from, next) => {
 
     // 如果目标路由需要登录且用户未登录
     if (to.meta.requiresAuth && !userInfo) {
-        error('请先登录，既可体验完整功能')
+        error('请先登录，即可体验完整功能')
         // 重定向到登录页面
         next('/login');
     } else {

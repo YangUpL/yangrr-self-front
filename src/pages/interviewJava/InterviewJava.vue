@@ -2,7 +2,6 @@
 import { onMounted, ref, watch } from "vue";
 import { obtainJavaQuestion } from "../../api/request";
 import { obtainJavaQuestionDto, questionPageDto } from "../../model/pojo";
-import { Search } from '@element-plus/icons-vue'
 
 const questionDtoArray = ref<Array<obtainJavaQuestionDto>>([
   {
@@ -21,6 +20,10 @@ const classificationArray = [
   { value: 2, label: '虚拟机JVM' },
   { value: 3, label: 'mysql' },
   { value: 4, label: 'redis' },
+  { value: 5, label: 'spring' },
+  { value: 6, label: 'springboot' },
+  { value: 7, label: 'springcloud' },
+  { value: 8, label: '设计模式' },
 ]
 
 import type { ComponentSize } from 'element-plus'
@@ -68,6 +71,8 @@ async function javaQuestion() {
   const resp = await obtainJavaQuestion(pageInfo);
   total.value = resp.total;
   const arr = resp.javaQuestionList;
+
+  console.log(arr)
 
   questionDtoArray.value = arr.length > 0 ? arr : [
     { id: 0, question: '暂无数据', classification: 0 }

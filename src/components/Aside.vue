@@ -69,7 +69,7 @@ onMounted(() => {
             <el-menu-item index="1-2-2">c++面试题</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="1-3">
-            <template #title>项目教学</template>
+            <template #title>视频教学</template>
             <el-menu-item index="1-3-1">java项目</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>

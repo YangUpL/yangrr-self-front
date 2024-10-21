@@ -22,13 +22,7 @@
 
     <div id="info">
       <!-- 弹窗提示 -->
-      <div id="note" v-if="showNote && uniqueId" class="modal">
-        <div class="modal-content">
-          <p>温馨提示: 请妥善保管您的唯一用户表示ID:<br>{{ uniqueId }}<br>这是你找回密码的唯一方式。</p>
-          <p>此信息将在 <b>{{ countdown }}</b> 秒后消失。</p>
-          <button @click="hideNote" class="close-btn">我已知晓</button>
-        </div>
-      </div>
+
 
       <router-link to="/login" v-show="!isLogin" class="login-link">
         去登录，体验完整功能
@@ -41,38 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { ArrowRight } from '@element-plus/icons-vue';
 
-const uniqueId = ref<string | null>(null);
 const isLogin = ref(false);
-const totalSeconds = 30;
-const countdownKeyPrefix = 'countdownTime_';
-const hasSeenNoteKeyPrefix = 'hasSeenNote_';
-let countdownTimer: number;
-
-const currentSeconds = ref(totalSeconds);
-const showNote = ref(true); // 控制是否显示提示
-
-const countdown = computed(() => {
-  return currentSeconds.value >= 0 ? currentSeconds.value : 0;
-});
-
-const hideNote = () => {
-  showNote.value = false;
-  if (uniqueId.value) {
-    localStorage.setItem(hasSeenNoteKeyPrefix + uniqueId.value, 'true');
-    // 清除存储的倒计时时间
-    localStorage.removeItem(countdownKeyPrefix + uniqueId.value);
-  }
-};
-
-const resetCountdown = () => {
-  if (uniqueId.value) {
-    currentSeconds.value = totalSeconds;
-    localStorage.setItem(countdownKeyPrefix + uniqueId.value, String(Date.now() + totalSeconds * 1000));
-  }
-};
 
 const isLargeScreen = ref(window.innerWidth >= 1250);
 
@@ -81,73 +47,14 @@ const updateScreenSize = () => {
 };
 
 onMounted(() => {
-  // 获取 sessionStorage 中的用户信息
-  const sessionUser = sessionStorage.getItem('userInfo');
-  if (sessionUser) {
-    isLogin.value = true;
-    const userInfo = JSON.parse(sessionUser);
-    if (userInfo) {
-      uniqueId.value = userInfo.uniqueId;
-
-      // 检查该用户是否已经看到过提示
-      const hasSeenNote = localStorage.getItem(hasSeenNoteKeyPrefix + uniqueId.value);
-      if (hasSeenNote) {
-        showNote.value = false;
-      } else {
-        // 从 localStorage 获取倒计时时间戳
-        const storedCountdownTime = localStorage.getItem(countdownKeyPrefix + uniqueId.value);
-        if (storedCountdownTime) {
-          const remainingTime = Math.max(
-            0,
-            Math.floor((parseInt(storedCountdownTime) - Date.now()) / 1000)
-          );
-          currentSeconds.value = remainingTime;
-          if (remainingTime <= 0) {
-            hideNote();
-          }
-        } else {
-          resetCountdown();
-        }
-
-        // 启动倒计时
-        countdownTimer = setInterval(() => {
-          if (currentSeconds.value > 0) {
-            currentSeconds.value--;
-            localStorage.setItem(countdownKeyPrefix + uniqueId.value, String(Date.now() + currentSeconds.value * 1000));
-          } else {
-            hideNote();
-          }
-        }, 1000);
-      }
-    }
-  }
-
   // 监听窗口大小变化
   window.addEventListener('resize', updateScreenSize);
 });
 
 onUnmounted(() => {
-  clearInterval(countdownTimer);
   window.removeEventListener('resize', updateScreenSize);
 });
 
-// 30秒后清空 uniqueId 并隐藏提示
-setTimeout(() => {
-  if (uniqueId.value) {
-    const sessionUser = sessionStorage.getItem('userInfo');
-    if (sessionUser) {
-      const userInfo = JSON.parse(sessionUser);
-      userInfo.uniqueId = null;
-      sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
-      window.location.reload();
-    }
-  }
-  // 设置 localStorage 标志提示已经显示过
-  if (uniqueId.value) {
-    localStorage.setItem(hasSeenNoteKeyPrefix + uniqueId.value, 'true');
-  }
-  showNote.value = false;
-}, 30000);
 </script>
 
 <style scoped>

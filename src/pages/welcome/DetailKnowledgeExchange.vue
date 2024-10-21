@@ -77,7 +77,7 @@
           '1': [
             {
               id: 'c1',
-              avatar: 'https://via.placeholder.com/40',
+              avatar: 'https://img0.baidu.com/it/u=3422287847,344441285&fm=253&fmt=auto&app=138&f=JPEG?w=604&h=500',
               username: '用户1',
               time: '2024-09-01T14:00:00Z',
               content: '这是对第一篇文章的评论。',

@@ -4,7 +4,11 @@ import {register} from "../../api/request";
 import {RegisterDto} from "../../model/pojo";
 import router from "../../routers/router";
 
-const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkPassword: ''})
+const registerUser = ref<RegisterDto>({userAccount: '', 
+  userPassword: '', 
+  checkPassword: '',
+  email:''
+})
 
 
 </script>
@@ -17,6 +21,12 @@ const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkP
           <input type="text" required v-model="registerUser.userAccount">
           <label>请输入账号</label>
         </div>
+
+        <div class="item">
+          <input type="tect" required v-model="registerUser.email">
+          <label>请输入邮箱</label>
+        </div>
+        
         <div class="item">
           <input type="password" required v-model="registerUser.userPassword">
           <label>请输入密码</label>
@@ -26,6 +36,8 @@ const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkP
           <input type="password" required v-model="registerUser.checkPassword">
           <label>请再次输入密码</label>
         </div>
+
+        
         <button class="btn" @click="register(registerUser)">注册
           <span></span>
           <span></span>
@@ -35,6 +47,7 @@ const registerUser = ref<RegisterDto>({userAccount: '', userPassword: '', checkP
 
         <button class="btn" @click="router.push('login')">去登陆
         </button>
+
     </div>
   </div>
 </template>
@@ -69,9 +82,9 @@ input, button {
 
 .loginBox {
   width: 400px;
-  height: 450px;
+  height: 600px;
   background-color: #0c1622;
-  margin: 50px auto;
+  margin: 20px auto;
   border-radius: 10px;
   box-shadow: 0 15px 25px 0 rgba(0, 0, 0, .6);
   padding: 40px;
@@ -121,7 +134,7 @@ h2 {
   overflow: hidden;
   text-transform: uppercase;
   letter-spacing: 2px;
-  left: 35%;
+  left: 60%;
 }
 
 .btn:hover {
